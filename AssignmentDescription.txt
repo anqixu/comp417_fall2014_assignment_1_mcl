@@ -1,0 +1,56 @@
+Robotics 765 course assignment
+G Dudek
+
+The practical assigment consists in implementing a particle filter for localisation (Monte Carlo localisation), as seen in class,
+using ROS (Robot Operating System).  Once implemented, you should measure it's perforance in terms of run time and accuracy as a function of the number of particles used.  See the on-line version of the assignment specification for details.
+
+ROS already contacins a package called AMCL for doing Monte Carlo localisation
+This assignment is intended as a replacement for AMCL.  On one hand, this makes your code less important to the world, but
+on the other hand you can look at AMCL dicumentation for hints, if you wish.
+
+Your task is to implement a class that inherits from the MCLocaliser interface and implements the missing methods. 
+Specifically, you should implement a sensor model and a motion model, 
+as well as the particle filter update rules. Skeleton code for running a simulator with a map and a robot, 
+and publishing information from the particle filter, is available here.
+
+The assignment requires that you are using Ubuntu. If you don't have it on your own computer, 
+computers running Ubuntu are available in the labs in Trottier.  If you want to use Virtual Box on Linux of MacOS, you
+can do that, but as I mentioned in class there are some hassles to be expected, including the large download
+image size.  
+
+Download the base files for the assignment here
+
+You should use full desktop install of ROS. The skeleton code is made available to handle the communication to and from ROS, so you should not need to deal too much with how ROS works.
+
+In addition to the packages installed with the full desktop install, you may also install occupancy_grid_utils. These are useful tools for dealing with grid maps, and are required for compiling the SkeletonLocaliser class (which you should replace with your own). Run sudo apt-get install ros-electric-occupancy-grid-utils .
+
+
+Create a ROS workspace, and extract the assignment files in that directory.
+
+Run rospack profile to make sure that the lab package is found by ROS.
+
+If on a home computer, run the following in a terminal to install necessary packages:
+sudo apt-get install ros-hydro-stage-ros ros-hydro-turtlesim ros-hydro-map-server ros-hydro-rviz ros-hydro-stage
+
+The lab machines at Trottier should have these packages installed already.
+
+At the src folder of your catkin workspace (e.g. ~/catkin_ws/src), run the following in a terminal to pull the occupancy_grid_utils package:
+git clone https://github.com/anqixu/occupancy_grid_utils
+
+At the root of your catkin workspace folder (e.g. ~/catkin_ws/), run 'catkin_make' in a terminal to compile the skeleton code.
+
+There is a launch file available, that makes it more convenient to run all components of ROS that are needed for the exercise.
+To start it, run roslaunch comp417_fall2014_assignment_1_mcl probrob_mcl.launch . This should open up two windows displaying the robot and a map.
+
+In the Stage window, you can drag the display with the mouse, so that you can see the simulated robot (a blue square). You can also enable display of the simulated laser range finder, under the menu "View / Data"
+
+In the rviz window, make sure that default plugins are enabled, under the menu "Plugins / Manage...". Also make sure that the fixed frame is set to /map.
+
+In a new terminal, run a program to tele-operate the simulated robot with the keyboard:
+rosrun turtlesim turtle_teleop_key /turtle1/cmd_vel:=/cmd_vel
+
+Check that you can teleoperate the robot by pressing the arrow keys (up/down/left/right) in the terminal window where the tele-operator is running. The Stage window should show how the robot moves, and what its laser sees.
+
+Run the example MCL program, which doesn't do much, but should show a set of particles as red arrows in the rviz window.
+
+Your job is to update the code in the src folder and make the particles follow the robot as it is driven.

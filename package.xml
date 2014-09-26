@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<package>
+  <name>comp417_fall2014_assignment_1_mcl</name>
+  <version>0.0.0</version>
+  <description>Base code for COMP-417 Fall 2014 assignment 1:
+    Monte-Carlo Localizer; derived from course assignment of
+    the spring 2012 Probabilistic Robotics course.</description>
+
+  <author>Martin Magnusson</author>
+  <maintainer email="anqixu@cim.mcgill.ca">Anqi Xu</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>occupancy_grid_utils</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>occupancy_grid_utils</run_depend>
+  <run_depend>rviz</run_depend>
+  <run_depend>stage</run_depend>
+  <run_depend>stage_ros</run_depend>
+  <run_depend>turtlesim</run_depend>
+  <run_depend>map_server</run_depend>
+</package>

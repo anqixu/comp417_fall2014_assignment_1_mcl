@@ -1,0 +1,16 @@
+<launch>
+  <param name="/use_sim_time" value="true"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find comp417_fall2014_assignment_1_mcl)/misc/labmap.yaml" respawn="false" output="screen" />
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find comp417_fall2014_assignment_1_mcl)/misc/lab.world" respawn="false" output="screen" >
+    <param name="base_watchdog_timeout" value="0.2"/>
+  </node>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find comp417_fall2014_assignment_1_mcl)/misc/probrob_mcl.rviz" />
+  <node name="tf" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /odom 100" />
+  
+  <!-- Don't auto-launch the stage keyboard teleoperation (better to
+       launch it manually in a separate terminal window, and don't
+       auto-launch the actual MCL node (because it will need to be
+       recompiled and restarted so often anyway) -->
+  <!-- <node pkg="turtlesim" type="turtle_teleop_key" name="turtle_teleop_key"><remap from="/turtle1/cmd_vel" to="/cmd_vel"></node> -->
+  <!-- <node pkg="comp417_fall2014_assignment_1_mcl" name="mcllab" type="mcllab" />   -->
+</launch>
