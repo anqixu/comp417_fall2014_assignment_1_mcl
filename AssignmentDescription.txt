@@ -53,4 +53,6 @@ Check that you can teleoperate the robot by pressing the arrow keys (up/down/lef
 
 Run the example MCL program, which doesn't do much, but should show a set of particles as red arrows in the rviz window.
 
-Your job is to update the code in the src folder and make the particles follow the robot as it is driven.
+Your job is to update the code in the src folder (mainly SkeletonLocaliser.hpp) and make the particles follow the robot as it is driven, following the formulation of a particle filter (i.e. propagate with Gaussian noise, update particle weights during observe, and resample particles to prevent degeneracy).
+
+Some existing debugging printouts have already been implemented (search for ROS_DEBUG(...) lines). To get them to show, either change to ROS_INFO(...), or use the rqt_logger_level tool.

@@ -22,6 +22,7 @@ MCLocaliser::MCLocaliser( int particleCount )
   this->prevT = 0;
 }
 
+
 void MCLocaliser::setMap( const nav_msgs::OccupancyGrid& map )
 {
   this->map = map;
@@ -33,7 +34,6 @@ void MCLocaliser::setMap( const nav_msgs::OccupancyGrid& map )
 
 void MCLocaliser::update( const LaserScan& scan
                           , const tfMessage& transform
-                          //, const tf::StampedTransform& transform
                           , const ros::Time& currentTime
                           )
 {
@@ -63,7 +63,7 @@ void MCLocaliser::update( const LaserScan& scan
     }
     
   }
-
+  
 
   // Call methods defined in inheriting class, to apply motion and
   // sensor models.
@@ -83,14 +83,6 @@ void MCLocaliser::update( const LaserScan& scan
 }
 
 
-geometry_msgs::PoseWithCovarianceStamped MCLocaliser::updatePoseStamped()
-{
-  PoseWithCovarianceStamped p;
-  p.pose = this->updatePose(  );
-  return p;
-}
-
-
 void MCLocaliser::setInitialPose
 ( const geometry_msgs::PoseWithCovarianceStamped& pose )
 {  
@@ -99,12 +91,11 @@ void MCLocaliser::setInitialPose
 }
 
 
-
 geometry_msgs::PoseStamped MCLocaliser::getPoseStamped()
 {
   geometry_msgs::PoseStamped p;
   p.header = this->estimatedPose.header;
   p.pose = this->estimatedPose.pose.pose;
-  // TODO subtract /odom
+  // OUTDATED TODO? subtract /odom
   return p;    
 }

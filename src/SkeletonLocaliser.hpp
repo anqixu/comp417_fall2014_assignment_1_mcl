@@ -20,7 +20,8 @@ public:
   
   virtual void initialisePF( const geometry_msgs::PoseWithCovarianceStamped& initialpose )
   {
-    // Just place all particles on a line along x=y. This should be
+    // TODO: complete this function
+    // Current code places all particles on a line along x=y. This should be
     // replaced with something more sensible, like drawing particles
     // from a Gaussian distribution with large variance centered on
     // the supplied initial pose, or just placing them in a regular
@@ -44,6 +45,7 @@ protected:
    */
   virtual void applyMotionModel( double deltaX, double deltaY, double deltaT )
   {
+    // TODO: complete this function
     if (deltaX > 0 or deltaY > 0)
       ROS_DEBUG( "applying odometry: %f %f %f", deltaX, deltaY, deltaT );
     for (unsigned int i = 0; i < particleCloud.poses.size(); ++i)
@@ -61,6 +63,7 @@ protected:
    */
   virtual void applySensorModel( const sensor_msgs::LaserScan& scan )
   {
+    // TODO: complete this function
     /* This method is the beginning of an implementation of a beam
      * sensor model */  
     for (unsigned int i = 0; i < particleCloud.poses.size(); ++i)
@@ -105,6 +108,7 @@ protected:
     const nav_msgs::OccupancyGrid& map,
     const geometry_msgs::PoseArray& particleCloud )
   {
+    // TODO: complete this function
     return this->particleCloud;
   }
 
@@ -113,8 +117,9 @@ protected:
    */
   virtual geometry_msgs::PoseWithCovariance updatePose()
   {
-    this->estimatedPose.pose.pose = particleCloud.poses[0];
-    //TODO: also update the covariance
+    // TODO: complete this function
+    this->estimatedPose.pose.pose = particleCloud.poses[0]; // HINT: this is NOT the correct solution. We want the "most likely pose", not the "pose of the first particle"
+    // HINT: remember to also update the covariance
     return this->estimatedPose.pose;
   }
 

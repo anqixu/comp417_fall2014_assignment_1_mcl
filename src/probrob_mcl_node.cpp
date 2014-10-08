@@ -77,7 +77,7 @@ void tfCallback( const tf::tfMessage& msg )
   }
 }
 
-
+/*
 void odomCallback( const nav_msgs::Odometry& msg )
 {
   if (mapReceived)
@@ -92,11 +92,11 @@ void odomCallback( const nav_msgs::Odometry& msg )
     
     //mcl->update( latestScan, msg, ros::Time::now() );
 
-    
     // posePublisher.publish( mcl->getPoseStamped() );
     // PCPublisher.publish( mcl->getParticleCloud () );
   }
 }
+*/
 
 
 //-------------------------------------------------------------------------//
@@ -142,8 +142,7 @@ int main( int argc, char** argv )
   // odom_sub.
   ros::Subscriber tf_sub =
     ros.subscribe("tf", 10, tfCallback);
-  ros::Subscriber odom_sub =
-    ros.subscribe("odom", 10, odomCallback); 
+  //ros::Subscriber odom_sub = ros.subscribe("odom", 10, odomCallback); // TODO: (optional) switch from a tf-pose-based model to an odom-velocity-based model (warning: current code will fail to compile!)
 
   // Wait until map received
   ROS_INFO( "Wating for map." );

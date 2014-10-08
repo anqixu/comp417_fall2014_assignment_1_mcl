@@ -112,12 +112,6 @@ protected:
   geometry_msgs::PoseWithCovarianceStamped updatePoseStamped();
 
 
-  tf::tfMessage updateTf
-  ( const geometry_msgs::PoseWithCovarianceStamped& pose,
-    const tf::tfMessage& tf,
-    const ros::Time& currentTime
-    );
-
   void updateOdom( double x, double y );
 
   /**    
