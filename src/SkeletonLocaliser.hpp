@@ -19,6 +19,9 @@
 class SkeletonLocaliser: public MCLocaliser
 {
 public:
+  const static double degree = 180.0/M_PI;
+  const static double radian = M_PI/180.0;
+
   // TODO: these constants may need to be tuned
   const static double INIT_XY_STD_M = 15.0;
   const static double INIT_YAW_STD_DEG = 10000.0; // large value -> uniform random
@@ -33,7 +36,6 @@ public:
   }
 
 
-  
   virtual void initialisePF( const geometry_msgs::PoseWithCovarianceStamped& initialpose )
   {
     // TODO: complete this function
@@ -42,6 +44,12 @@ public:
     // from a Gaussian distribution with large variance centered on
     // the supplied initial pose, or just placing them in a regular
     // grid across the map.
+    
+    double init_x = initialpose.pose.pose.position.x;
+    double init_y = initialpose.pose.pose.position.y;
+    double init_yaw_rad = tf::getYaw(initialpose.pose.pose.orientation);
+    ROS_INFO("Initializing PF at (x, y)=(%.2f, %.2f) m and yaw=%.2f deg", init_x, init_y, init_yaw_rad*degree);
+    
     for (unsigned int i = 0; i < particleCloud.poses.size(); ++i)
     {
       particleCloud.poses[i].position.x = i + randg();
