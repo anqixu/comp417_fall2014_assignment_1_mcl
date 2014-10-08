@@ -7,6 +7,8 @@
 #include "occupancy_grid_utils/ray_tracer.h"
 
 #include <iostream>
+#include <boost/random.hpp>
+#include <boost/random/normal_distribution.hpp>
 
 /**
  * This class implements the pure virtual methods of PFLocaliser. It
@@ -17,6 +19,20 @@
 class SkeletonLocaliser: public MCLocaliser
 {
 public:
+  // TODO: these constants may need to be tuned
+  const static double INIT_XY_STD_M = 15.0;
+  const static double INIT_YAW_STD_DEG = 10000.0; // large value -> uniform random
+  
+  boost::mt19937 rng;
+  boost::normal_distribution<> gausNorm;
+  boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > randg;
+  
+  
+  SkeletonLocaliser( int particleCount = 100 ) : MCLocaliser(particleCount), gausNorm(0.0, 1.0), randg(rng, gausNorm)
+  {
+  }
+
+
   
   virtual void initialisePF( const geometry_msgs::PoseWithCovarianceStamped& initialpose )
   {
@@ -28,10 +44,10 @@ public:
     // grid across the map.
     for (unsigned int i = 0; i < particleCloud.poses.size(); ++i)
     {
-      particleCloud.poses[i].position.x = i;
-      particleCloud.poses[i].position.y = i;
+      particleCloud.poses[i].position.x = i + randg();
+      particleCloud.poses[i].position.y = i + randg();
       geometry_msgs::Quaternion odom_quat =
-        tf::createQuaternionMsgFromYaw(i*0.01);
+        tf::createQuaternionMsgFromYaw(i*0.01 + randg());
       particleCloud.poses[i].orientation = odom_quat;
     }
   }
