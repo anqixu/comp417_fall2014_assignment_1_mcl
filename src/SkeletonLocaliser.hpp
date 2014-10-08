@@ -21,17 +21,41 @@ class SkeletonLocaliser: public MCLocaliser
 public:
   const static double degree = 180.0/M_PI;
   const static double radian = M_PI/180.0;
+  const static double TWO_PI = M_PI*2;
+  
+ 
+  const double angularDist(double aRad, double bRad)
+  {
+    double dRad = bRad - aRad + M_PI;
+    if (dRad > 0) {
+      dRad = dRad - floor(dRad/TWO_PI)*TWO_PI - M_PI;
+    } else {
+      dRad = dRad - (floor(dRad/TWO_PI) + 1)*TWO_PI + M_PI;
+    }
+    return abs(dRad);
+  }
+
 
   // TODO: these constants may need to be tuned
   const static double INIT_XY_STD_M = 15.0;
   const static double INIT_YAW_STD_DEG = 10000.0; // large value -> uniform random
+
+  // TODO: hint - might want to add more constants here relating to propagation and observation variance; also random particle re-injection settings
   
+  // Hard-coded world constraints (okay for this assignment)
+  const static double WORLD_X_MIN = 0;
+  const static double WORLD_X_MAX = 50;
+  const static double WORLD_Y_MIN = 0;
+  const static double WORLD_Y_MAX = 50;
+
   boost::mt19937 rng;
   boost::normal_distribution<> gausNorm;
+  boost::uniform_real<> uniformReal;
   boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > randg;
+  boost::variate_generator<boost::mt19937&, boost::uniform_real<> > randn;
   
   
-  SkeletonLocaliser( int particleCount = 100 ) : MCLocaliser(particleCount), gausNorm(0.0, 1.0), randg(rng, gausNorm)
+  SkeletonLocaliser( int particleCount = 200 ) : MCLocaliser(particleCount), gausNorm(0.0, 1.0), uniformReal(0.0, 1.0), randg(rng, gausNorm), randn(rng, uniformReal)
   {
   }
 
@@ -45,20 +69,26 @@ public:
     // the supplied initial pose, or just placing them in a regular
     // grid across the map.
     
-    double init_x = initialpose.pose.pose.position.x;
-    double init_y = initialpose.pose.pose.position.y;
-    double init_yaw_rad = tf::getYaw(initialpose.pose.pose.orientation);
-    ROS_INFO("Initializing PF at (x, y)=(%.2f, %.2f) m and yaw=%.2f deg", init_x, init_y, init_yaw_rad*degree);
+    double xInitM = initialpose.pose.pose.position.x;
+    double yInitM = initialpose.pose.pose.position.y;
+    double yawInitRad = tf::getYaw(initialpose.pose.pose.orientation);
+    ROS_INFO("Initializing PF at (x, y)=(%.2f, %.2f) m and yaw=%.2f deg", xInitM, yInitM, yawInitRad*degree);
     
-    for (unsigned int i = 0; i < particleCloud.poses.size(); ++i)
+    const double numParticles = particleCloud.poses.size();
+    const double initWeight = 1.0/numParticles;
+    for (unsigned int i = 0; i < numParticles; ++i)
     {
       particleCloud.poses[i].position.x = i + randg();
       particleCloud.poses[i].position.y = i + randg();
       geometry_msgs::Quaternion odom_quat =
         tf::createQuaternionMsgFromYaw(i*0.01 + randg());
       particleCloud.poses[i].orientation = odom_quat;
+      
+      // Store the normalized particle weight as its z-position
+      particleCloud.poses[i].position.z = initWeight;
     }
   }
+  
   
 protected:
 
@@ -78,6 +108,7 @@ protected:
       particleCloud.poses[i].position.y += deltaY;      
     }
   }
+  
 
   /**
    * After the motion model moves the particles around, approximately
@@ -90,14 +121,14 @@ protected:
     // TODO: complete this function
     /* This method is the beginning of an implementation of a beam
      * sensor model */  
+    geometry_msgs::Pose sensor_pose;
+    sensor_msgs::LaserScan::Ptr simulatedScan;
     for (unsigned int i = 0; i < particleCloud.poses.size(); ++i)
     {
-      geometry_msgs::Pose sensor_pose;      
       sensor_pose =  particleCloud.poses[i];
       /* If the laser and centre of the robot weren't at the same
        * position, we would first apply the tf from /base_footprint
        * to /base_laser here. */
-      sensor_msgs::LaserScan::Ptr simulatedScan;
       try{
         simulatedScan
           = occupancy_grid_utils::simulateRangeScan
@@ -105,6 +136,7 @@ protected:
       }
       catch (occupancy_grid_utils::PointOutOfBoundsException)
       {
+        // TODO: hint -- how to recover gracefully?
         continue;
       }
 

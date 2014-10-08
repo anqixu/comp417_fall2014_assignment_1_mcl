@@ -59,6 +59,10 @@ public:
                , const tf::tfMessage& odom
                , const ros::Time& currentTime
                );
+  void update( const sensor_msgs::LaserScan& scan
+               , const nav_msgs::Odometry& odom
+               , const ros::Time& currentTime
+               );
 
 
   

@@ -52,7 +52,7 @@ void MCLocaliser::update( const LaserScan& scan
       
       deltaX = o.transform.translation.x - this->prevX;
       deltaY = o.transform.translation.y - this->prevY;
-      deltaT = tf::getYaw( o.transform.rotation ) - this->prevT;
+      deltaT = tf::getYaw( o.transform.rotation ) - this->prevT; // WARNING: this code assumes yaw changes below 180'
 
       this->prevX = o.transform.translation.x;
       this->prevY = o.transform.translation.y;
@@ -69,6 +69,44 @@ void MCLocaliser::update( const LaserScan& scan
   // sensor models.
   this->applyMotionModel( deltaX, deltaY, deltaT );
   this->applySensorModel( scan );
+  
+  // Update the set of particles based on their (probably un-normalized) weights
+  this->particleCloud = this->updateParticleCloud(scan, this->map, this->particleCloud);
+
+  // Update the most likely pose (the output of the algorithm)
+  this->updatePose();
+  
+  // Insert timestamp and tf frames (making sure that the poses in the
+  // particle cloud and the estimated pose relate to the fixed
+  // coordinate frame "/map").
+  this->particleCloud.header.stamp = currentTime;
+  this->particleCloud.header.frame_id = "/map";
+  this->estimatedPose.header.stamp = currentTime;
+  this->estimatedPose.header.frame_id = "/map";
+}
+
+
+void MCLocaliser::update( const LaserScan& scan
+                          , const nav_msgs::Odometry& odom
+                          , const ros::Time& currentTime
+                          )
+{
+  // Compute odometry increment
+  double deltaX = odom.pose.pose.position.x - this->prevX;
+  double deltaY = odom.pose.pose.position.y - this->prevY;
+  double currYaw = tf::getYaw(odom.pose.pose.orientation);
+  double deltaT = currYaw - this->prevT; // WARNING: this code assumes yaw changes below 180'
+  this->prevX = odom.pose.pose.position.x;
+  this->prevY = odom.pose.pose.position.y;
+  this->prevT = currYaw;
+
+  // Call methods defined in inheriting class, to apply motion and
+  // sensor models.
+  this->applyMotionModel( deltaX, deltaY, deltaT );
+  this->applySensorModel( scan );
+
+  // Update the set of particles based on their (probably un-normalized) weights
+  this->particleCloud = this->updateParticleCloud(scan, this->map, this->particleCloud);
 
   // Update the most likely pose (the output of the algorithm)
   this->updatePose();

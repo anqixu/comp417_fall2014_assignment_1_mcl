@@ -65,6 +65,7 @@ void mapCallback( const nav_msgs::OccupancyGrid& msg )
  * This is called whenever a new transform is received, and triggers
  * updating of the particle filter.
  */
+ /*
 void tfCallback( const tf::tfMessage& msg )
 {
   if (mapReceived)
@@ -76,8 +77,9 @@ void tfCallback( const tf::tfMessage& msg )
 
   }
 }
+*/
 
-/*
+
 void odomCallback( const nav_msgs::Odometry& msg )
 {
   if (mapReceived)
@@ -90,13 +92,12 @@ void odomCallback( const nav_msgs::Odometry& msg )
                msg.header.stamp.toSec() 
               );
     
-    //mcl->update( latestScan, msg, ros::Time::now() );
+    mcl->update( latestScan, msg, ros::Time::now() );
 
-    // posePublisher.publish( mcl->getPoseStamped() );
-    // PCPublisher.publish( mcl->getParticleCloud () );
+    posePublisher.publish( mcl->getPoseStamped() );
+    PCPublisher.publish( mcl->getParticleCloud () );
   }
 }
-*/
 
 
 //-------------------------------------------------------------------------//
@@ -140,9 +141,8 @@ int main( int argc, char** argv )
   // velocity, so for a velocity motion model, you would need to
   // subscribe to "/odom" messages instead, as in the (commented)
   // odom_sub.
-  ros::Subscriber tf_sub =
-    ros.subscribe("tf", 10, tfCallback);
-  //ros::Subscriber odom_sub = ros.subscribe("odom", 10, odomCallback); // TODO: (optional) switch from a tf-pose-based model to an odom-velocity-based model (warning: current code will fail to compile!)
+  //ros::Subscriber tf_sub = ros.subscribe("tf", 10, tfCallback);
+  ros::Subscriber odom_sub = ros.subscribe("odom", 10, odomCallback);
 
   // Wait until map received
   ROS_INFO( "Wating for map." );
