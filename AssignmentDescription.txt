@@ -66,45 +66,45 @@ Steps needed to make this sample codebase compile under Ubuntu 14.04 and ROS Ind
 
 2. make the following changes in comp417_.../CMakeLists.txt
 
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -9,15 +9,16 @@ find_package(catkin REQUIRED CO
-   nav_msgs
-   tf
-   occupancy_grid_utils
-+  cmake_modules
- )
- 
--find_package(Eigen REQUIRED) # for Ubuntu < 14.0
--#find_package(Eigen3 REQUIRED) # for Ubuntu 14.0
-+#find_package(Eigen REQUIRED) # for Ubuntu < 14.
-+find_package(Eigen3 REQUIRED) # for Ubuntu 14.04
- 
- catkin_package(
- #  INCLUDE_DIRS include
- #  LIBRARIES comp417_fall2014_assignment_1_mcl
--  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geo
-+  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geo
- #  DEPENDS system_lib
- )
+  --- a/CMakeLists.txt
+  +++ b/CMakeLists.txt
+  @@ -9,15 +9,16 @@ find_package(catkin REQUIRED CO
+     nav_msgs
+     tf
+     occupancy_grid_utils
+  +  cmake_modules
+   )
+   
+  -find_package(Eigen REQUIRED) # for Ubuntu < 14.0
+  -#find_package(Eigen3 REQUIRED) # for Ubuntu 14.0
+  +#find_package(Eigen REQUIRED) # for Ubuntu < 14.
+  +find_package(Eigen3 REQUIRED) # for Ubuntu 14.04
+   
+   catkin_package(
+   #  INCLUDE_DIRS include
+   #  LIBRARIES comp417_fall2014_assignment_1_mcl
+  -  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geo
+  +  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geo
+   #  DEPENDS system_lib
+   )
 
 3. make the following additions in comp417_.../package.xml
 
---- a/package.xml
-+++ b/package.xml
-@@ -20,6 +20,7 @@
-   <build_depend>nav_msgs</build_depend>
-   <build_depend>tf</build_depend>
-   <build_depend>occupancy_grid_utils</build_depe
-+  <build_depend>cmake_modules</build_depend>
- 
-   <run_depend>roscpp</run_depend>
-   <run_depend>std_msgs</run_depend>
-@@ -33,4 +34,5 @@
-   <run_depend>stage_ros</run_depend>
-   <run_depend>turtlesim</run_depend>
-   <run_depend>map_server</run_depend>
-+  <run_depend>cmake_modules</run_depend>
- </package>
+  --- a/package.xml
+  +++ b/package.xml
+  @@ -20,6 +20,7 @@
+     <build_depend>nav_msgs</build_depend>
+     <build_depend>tf</build_depend>
+     <build_depend>occupancy_grid_utils</build_depe
+  +  <build_depend>cmake_modules</build_depend>
+   
+     <run_depend>roscpp</run_depend>
+     <run_depend>std_msgs</run_depend>
+  @@ -33,4 +34,5 @@
+     <run_depend>stage_ros</run_depend>
+     <run_depend>turtlesim</run_depend>
+     <run_depend>map_server</run_depend>
+  +  <run_depend>cmake_modules</run_depend>
+   </package>
 
 4. please email the TA if you run into further issues
