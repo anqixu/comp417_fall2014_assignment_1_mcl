@@ -76,16 +76,16 @@ Steps needed to make this sample codebase compile under Ubuntu 14.04 and ROS Ind
 +  cmake_modules
  )
  
--find_package(Eigen REQUIRED) # for Ubuntu < 14.0
--#find_package(Eigen3 REQUIRED) # for Ubuntu 14.0
-+#find_package(Eigen REQUIRED) # for Ubuntu < 14.
+-find_package(Eigen REQUIRED) # for Ubuntu < 14.04
+-#find_package(Eigen3 REQUIRED) # for Ubuntu 14.04
++#find_package(Eigen REQUIRED) # for Ubuntu < 14.04
 +find_package(Eigen3 REQUIRED) # for Ubuntu 14.04
  
  catkin_package(
  #  INCLUDE_DIRS include
  #  LIBRARIES comp417_fall2014_assignment_1_mcl
--  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geo
-+  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geo
+-  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geometry_msgs nav_msgs tf occupancy_grid_utils stage stage_ros rviz turtlesim map_server
++  CATKIN_DEPENDS roscpp std_msgs sensor_msgs geometry_msgs nav_msgs tf occupancy_grid_utils stage stage_ros rviz turtlesim map_server cmake_modules
  #  DEPENDS system_lib
  )
 ```
@@ -98,7 +98,7 @@ Steps needed to make this sample codebase compile under Ubuntu 14.04 and ROS Ind
 @@ -20,6 +20,7 @@
    <build_depend>nav_msgs</build_depend>
    <build_depend>tf</build_depend>
-   <build_depend>occupancy_grid_utils</build_depe
+   <build_depend>occupancy_grid_utils</build_depend>
 +  <build_depend>cmake_modules</build_depend>
  
    <run_depend>roscpp</run_depend>
