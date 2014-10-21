@@ -22,8 +22,11 @@ Download the base files for the assignment here
 
 You should use full desktop install of ROS. The skeleton code is made available to handle the communication to and from ROS, so you should not need to deal too much with how ROS works.
 
-In addition to the packages installed with the full desktop install, you may also install occupancy_grid_utils. These are useful tools for dealing with grid maps, and are required for compiling the SkeletonLocaliser class (which you should replace with your own). Run sudo apt-get install ros-electric-occupancy-grid-utils .
+In addition to the packages installed with the full desktop install, you may also install occupancy_grid_utils. These are useful tools for dealing with grid maps, and are required for compiling the SkeletonLocaliser class (which you should replace with your own).
 
+!!!!!
+Before moving further, complete all the entries of "Core ROS Tutorials - Beginner Level": http://wiki.ros.org/ROS/Tutorials
+!!!!!
 
 Create a ROS workspace, and extract the assignment files in that directory.
 
@@ -44,14 +47,13 @@ To start it, run roslaunch comp417_fall2014_assignment_1_mcl probrob_mcl.launch 
 
 In the Stage window, you can drag the display with the mouse, so that you can see the simulated robot (a blue square). You can also enable display of the simulated laser range finder, under the menu "View / Data"
 
-In the rviz window, make sure that default plugins are enabled, under the menu "Plugins / Manage...". Also make sure that the fixed frame is set to /map.
-
 In a new terminal, run a program to tele-operate the simulated robot with the keyboard:
 rosrun turtlesim turtle_teleop_key /turtle1/cmd_vel:=/cmd_vel
 
 Check that you can teleoperate the robot by pressing the arrow keys (up/down/left/right) in the terminal window where the tele-operator is running. The Stage window should show how the robot moves, and what its laser sees.
 
-Run the example MCL program, which doesn't do much, but should show a set of particles as red arrows in the rviz window.
+Run the example MCL program, which doesn't do much, but should show a set of particles as red arrows in the rviz window:
+rosrun comp417_fall2014_assignment_1_mcl mcllab
 
 Your job is to update the code in the src folder (mainly SkeletonLocaliser.hpp) and make the particles follow the robot as it is driven, following the formulation of a particle filter (i.e. propagate with Gaussian noise, update particle weights during observe, and resample particles to prevent degeneracy).
 
